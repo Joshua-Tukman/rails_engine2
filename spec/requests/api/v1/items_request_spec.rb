@@ -64,7 +64,7 @@ RSpec.describe "Items API" do
     item = Item.find_by(id: id)
     expect(response).to be_successful
     json_response = JSON.parse(response.body, symbolize_names: true)
-    binding.pry
+    
     expect(json_response[:data][:attributes][:name]).to eq(item.name)
   end
 end
