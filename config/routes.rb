@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get '/customers', to: 'customers#index'
   namespace :api do
     namespace :v1 do
-      resources :items, only: [ :index, :show, :create ]
+      resources :items, except: [ :new, :edit ]
     end
   end
 end
