@@ -4,8 +4,13 @@ Rails.application.routes.draw do
   get '/customers', to: 'customers#index'
   namespace :api do
     namespace :v1 do
-      resources :items, except: [ :new, :edit ]
-      resources :merchants, except: [ :new, :edit ]
+      resources :items, except: [ :new, :edit ] do
+        get 'merchant', to: 'merchant_items#show'
+      end
+
+      resources :merchants, except: [ :new, :edit ] do
+        get '/items', to: 'merchant_items#index'
+      end
     end
   end
 end
