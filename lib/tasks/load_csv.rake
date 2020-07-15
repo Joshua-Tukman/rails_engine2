@@ -20,6 +20,8 @@ namespace :db do
         end
         object.create! row.to_hash
       end
-    end   
+     #object.reset_pk_sequence (This is the gem that will automatically fix the primary key conflict)
+     ActiveRecord::Base.connection.reset_pk_sequence!("#{object}")
+    end 
   end
 end
