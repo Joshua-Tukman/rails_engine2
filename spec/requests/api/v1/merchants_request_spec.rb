@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe "Merchants API" do
-  xit "returns a list of merchants" do
-    merchant = create(:merchant)
-    create_list(:item, 10, merchant_id: merchant.id)
+  it "returns a list of merchants" do
+    merchant = create_list(:merchant, 10)
     
-    get '/api/v1/items'
+    get '/api/v1/merchants'
 
     expect(response).to be_successful
     
@@ -26,46 +25,36 @@ RSpec.describe "Merchants API" do
     expect(json_response[:data][:attributes][:name]).to eq(merchant.name)
   end
 
-  xit "can create an item" do
-    merchant = create(:merchant)
-    item_params = { name: "Cold Beer", description: "Super tasty and refreshing", unit_price: 10, merchant_id: merchant.id}
+  it "can create a new merchant and delete a merchant" do
+    #merchant = create(:merchant)
+    merchant_params = { name: "Bones Brigade" }
 
-    post "/api/v1/items", params: item_params 
-    
-    json = JSON.parse(response.body, symbolize_names: true)
+    post "/api/v1/merchants", params: merchant_params 
+    merchant = Merchant.last
+    json_response = JSON.parse(response.body, symbolize_names: true)
     expect(response).to be_successful
-    item = json[:data]
-    expect(item[:attributes][:name]).to eq("Cold Beer")
-  end
-
-  xit "can delete an item" do
-    merchant = create(:merchant)
-    item_params = { name: "Cold Beer", description: "Super tasty and refreshing", unit_price: 10, merchant_id: merchant.id}
-
-    post "/api/v1/items", params: item_params 
-
-    item = Item.last
-
-    expect(item.name).to eq("Cold Beer")
     
-    delete "/api/v1/items/#{item.id}"
+    merchant_info = json_response[:data]
+    expect(merchant_info[:attributes][:name]).to eq(merchant.name)
+    
+    delete "/api/v1/merchants/#{merchant.id}"
     
     expect(response).to be_successful
-    expect{Item.find(item.id)}.to raise_error(ActiveRecord::RecordNotFound)
+    expect{Merchant.find(merchant.id)}.to raise_error(ActiveRecord::RecordNotFound)
   end
 
-  xit "can update an item" do
-    merchant = create(:merchant)
-    id = create(:item, merchant_id: merchant.id).id
-    
-    previous_name = Item.last.name
-    item_params = { name: "Skull and Sword" }
+  it "can update an merchant" do
+    id = create(:merchant).id
 
-    put "/api/v1/items/#{id}", params: item_params
-    item = Item.find_by(id: id)
+    previous_name = Merchant.last.name
+    merchant_params = { name: "The Grateful Goose" }
+
+    put "/api/v1/merchants/#{id}", params: merchant_params
+
+    merchant = Merchant.find_by(id: id)
     expect(response).to be_successful
     json_response = JSON.parse(response.body, symbolize_names: true)
     
-    expect(json_response[:data][:attributes][:name]).to eq(item.name)
+    expect(json_response[:data][:attributes][:name]).to eq(merchant.name)
   end
 end
