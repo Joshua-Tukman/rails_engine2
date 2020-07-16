@@ -50,7 +50,7 @@ RSpec.describe "Search API" do
      create(:item, name: "Curing", merchant_id: merchant.id)
      create(:item, name: "Sue", merchant_id: merchant.id)
      create(:item, name: "Bob", merchant_id: merchant.id)
-     create(:item, name: "Turing", merchant_id: merchant.id)
+     create(:item, name: "Turing", merchant_id: merchant.id, description: "blue")
 
      create(:item, name: "Enduring", merchant_id: merchant2.id)
      create(:item, name: "Coors", merchant_id: merchant2.id)
